@@ -201,21 +201,50 @@ const contactos =[
     img_yt:"https://res.cloudinary.com/dnju3aw4b/image/upload/v1698927256/youtube_ofzkpo.png"
   }
 ]
-
+const TIPOS = [] //Esto lo creamos para poder hacer una funcion y que los tipos no se repitan en el select
 
 let SELECT = "";
-let VALOR = "";
+let VALOR = 0;
 
-const filtroSelect = () => {
-  const filtered = productos.filter(producto => SELECT === '' || SELECT === producto.tipo);
+//funcion de duplicado
+const fillTipos = (tipos) =>{
+  TIPOS.splice(0); // limpiamos el array por completo desde la posicion 0
+  for( const tipo of tipos){
+    if(!TIPOS.includes(tipo.tipo)){
+        TIPOS.push(tipo.tipo)
+      }
+  }
+  
+}
+fillTipos(productos)
+//--------------------------------------filtos para el select para buscar por precio y por cambio de opcion
+
+
+const filtroSelect = () =>{
+  const filtered = []
+  for( const producto of productos){
+    if(SELECT === producto.tipo){
+      filtered.push(producto)
+    }
+  }
+  createProductos(filtered)
+}
+
+/* const filtroSelect = () => {
+  const filtered = productos.filter(producto => SELECT === 'Carta' || SELECT === producto.tipo);
   createProductos(filtered);
 };
+
 
 const filtroPrecio = () => {
-  const filtered = productos.filter(producto => VALOR === '' || producto.precio <= VALOR);
-  createProductos(filtered);
-};
-
+  const valorNumerico = parseInt(VALOR);
+  if (!isNaN(valorNumerico)) {
+    const filtered = productos.filter(producto => valorNumerico === 0 || producto.precio <= valorNumerico);
+    createProductos(filtered);
+  } else {
+    alert("El valor ingresado no es un número");
+  }
+}; */
 
 //Funcion para crear el navbar
 const createNavBar = () => {
@@ -280,18 +309,21 @@ babrir.style.display = "flex"
 })
 }
 
+
+
+
+
 //funcion del aside()
 const createAside = () => {
   const contacarro = document.querySelector(".contacarro")
   const divAside = document.querySelector(".container-filtros")
-  const selectAside = document.createElement("select")
-  
 
-  const products = ["Carta","Entrantes","Principales","Postres","Vinos"]
-  const labelAside = document.createElement("label")
+  const selectAside = document.createElement("select")
+   const labelAside = document.createElement("label")
   const inputAside = document.createElement("input")
   const botonInput = document.createElement("button")
   const botonAside = document.createElement("button")
+
   selectAside.classList.add("selectAside")
   labelAside.classList.add("labelAside")
   inputAside.classList.add("inputAside")
@@ -301,10 +333,13 @@ const createAside = () => {
   labelAside.textContent = "Precio"
   botonInput.textContent = ("🔎")
 
-for( const product of products){
+  
+
+
+for( const tipo of TIPOS){ //DE ESTA FORMA NO SE REPITEN LOS TIPOS EN LAS OPCIONES DEL SELECT
   const option = document.createElement("option")
-  option.value = product
-  option.textContent = product
+  option.value = tipo
+  option.textContent = tipo
 
   selectAside.appendChild(option)
 }
@@ -320,9 +355,18 @@ divAside.appendChild(botonAside)
 botonAside.addEventListener("click", ()=>{
   inputAside.value = ""
   contacarro.value = ""
-  selectAside.value = "Carta"
+  selectAside.value = ""
   createProductos()
 })
+
+
+selectAside.addEventListener("change",(e) =>{
+  SELECT = e.target.value;  
+  filtroSelect()
+})
+
+
+
 
 }
 
@@ -499,12 +543,16 @@ createProductos(productos)
 createComments()
 createContacts()
 
-document.querySelector(".selectAside").addEventListener("change", (event) => {
+/* document.querySelector(".selectAside").addEventListener("change", (event) => {
   SELECT = event.target.value;
   filtroSelect();
 });
 
 document.querySelector(".botonInput").addEventListener("click", () => {
-  VALOR = parseInt(document.querySelector(".inputAside").value);
-  filtroPrecio();
-});
+  VALOR = document.querySelector(".inputAside").value;
+  if (!isNaN(parseInt(VALOR))) {
+    filtroPrecio();
+  } else {
+    alert("El valor ingresado no es un número");
+  }
+}); */
