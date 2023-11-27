@@ -220,16 +220,40 @@ fillTipos(productos)
 //--------------------------------------filtos para el select para buscar por precio y por cambio de opcion
 
 
-const filtroSelect = () =>{
-  const filtered = []
+const filtroPrecio = () =>{
+  const articulo = document.querySelector(".articulo")
   for( const producto of productos){
-    if(SELECT === producto.tipo){
-      filtered.push(producto)
+    if(!producto.precio <= VALOR){
+      articulo.classList.add("invisible")
     }
   }
-  createProductos(filtered)
 }
 
+const filtroSelect = () =>{
+  const articulo = document.querySelector(".articulo")
+  for( const producto of productos){
+    if(!SELECT === producto.tipo){
+      articulo.classList.add("invisible")
+    }
+  }
+ 
+}
+
+const inputObtain= () =>{
+  const inputAside = document.querySelector("inputAside")
+  VALOR = inputAside.target.value 
+  filtroPrecio() 
+}
+/* const filtroPrecio= () =>{
+  const filtered = [];
+  for (const producto of productos){
+    if(producto.precio<= VALOR){
+      filtered.push(producto)
+    }
+
+  }
+  createProductos(filtered)
+} */
 /* const filtroSelect = () => {
   const filtered = productos.filter(producto => SELECT === 'Carta' || SELECT === producto.tipo);
   createProductos(filtered);
@@ -317,7 +341,7 @@ babrir.style.display = "flex"
 const createAside = () => {
   const contacarro = document.querySelector(".contacarro")
   const divAside = document.querySelector(".container-filtros")
-
+  const articulo = document.querySelector("articulo")
   const selectAside = document.createElement("select")
    const labelAside = document.createElement("label")
   const inputAside = document.createElement("input")
@@ -360,10 +384,15 @@ botonAside.addEventListener("click", ()=>{
 })
 
 
-selectAside.addEventListener("change",(e) =>{
+selectAside.addEventListener("change", () => {
   SELECT = e.target.value;  
-  filtroSelect()
+  for(const producto of productos){
+    if (!SELECT === producto.tipo){
+      articulo.classList.add("invisible")
+    }
+  }
 })
+
 
 
 
@@ -371,7 +400,7 @@ selectAside.addEventListener("change",(e) =>{
 }
 
 //funcion para inyectar todos los productos al main
-const createProductos = (productosMostrar = productos) => {
+const createProductos = () => {
 const containerSection = document.querySelector(".menu")
 const contacarro = document.querySelector(".contacarro")
 
@@ -396,6 +425,7 @@ productos.forEach(function(producto) {
   btn.textContent = producto.boton
 
   articulo.classList.add("articulo")
+  
   divImg.classList.add("divImg")
   img.classList.add("img")
   nombre.classList.add("nombre")
@@ -423,6 +453,9 @@ productos.forEach(function(producto) {
       contacarro.value = 1;
     }
   });
+
+
+ 
 })
 }
 //funcion para inyectar los comentarios de los clientes
@@ -539,7 +572,7 @@ const createContacts = () => {
 //Ejecución de funciones
 createNavBar()
 createAside()
-createProductos(productos)
+createProductos()
 createComments()
 createContacts()
 
