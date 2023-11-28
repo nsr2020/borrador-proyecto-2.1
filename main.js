@@ -222,20 +222,39 @@ fillTipos(productos)
 
 
 // Función para aplicar filtros dinámicos
-const filtroSelect = () => {
+/* const filtroSelect = () => {
   const filtered = productos.filter(producto => SELECT === '' || SELECT === producto.tipo)
 console.log(filtered);
   createProductos(filtered);
 };
-const filtroSelectAll = () =>{
-  createProductos()
-}
+
 
 const filtroPrecio = () => {
   const filtered = productos.filter(producto => VALOR === '' || producto.precio <= VALOR);
   console.log(filtered);
   createProductos(filtered);
+}; */
+// Función de filtro única
+const filtro = (valor, tipo) => {
+  if (tipo === "select") {
+    const filtered = productos.filter(
+      (producto) => valor === "" || valor === producto.tipo
+    );
+    console.log(filtered);
+    createProductos(filtered);
+  } else if (tipo === "precio") {
+    const filtered = productos.filter(
+      (producto) => valor === "" || producto.precio <= parseInt(valor)
+    );
+    
+    createProductos(filtered);
+  }
 };
+
+
+const filtroSelectAll = () =>{
+  createProductos()
+}
 
 //Funcion para crear el navbar
 const createNavBar = () => {
@@ -363,13 +382,17 @@ document.querySelector(".selectAside").addEventListener("change", (event) => {
   if (SELECT === "Todos"){
     filtroSelectAll()
   }else{
-  filtroSelect();
+  filtro(SELECT, "select")
   }
 });
 
-document.querySelector(".botonInput").addEventListener("click", () => {
+/* document.querySelector(".botonInput").addEventListener("click", () => {
   VALOR = parseInt(document.querySelector(".inputAside").value);
   filtroPrecio();
+}); */
+document.querySelector(".botonInput").addEventListener("click", () => {
+  const VALOR = document.querySelector(".inputAside").value;
+  filtro(VALOR, "precio");
 });
 
 }
