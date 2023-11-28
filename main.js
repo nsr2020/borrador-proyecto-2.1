@@ -220,55 +220,22 @@ fillTipos(productos)
 //--------------------------------------filtos para el select para buscar por precio y por cambio de opcion
 
 
-const filtroPrecio = () =>{
-  const articulo = document.querySelector(".articulo")
-  for( const producto of productos){
-    if(!producto.precio <= VALOR){
-      articulo.classList.add("invisible")
-    }
-  }
-}
 
-const filtroSelect = () =>{
-  const articulo = document.querySelector(".articulo")
-  for( const producto of productos){
-    if(!SELECT === producto.tipo){
-      articulo.classList.add("invisible")
-    }
-  }
- 
-}
-
-const inputObtain= () =>{
-  const inputAside = document.querySelector("inputAside")
-  VALOR = inputAside.target.value 
-  filtroPrecio() 
-}
-/* const filtroPrecio= () =>{
-  const filtered = [];
-  for (const producto of productos){
-    if(producto.precio<= VALOR){
-      filtered.push(producto)
-    }
-
-  }
-  createProductos(filtered)
-} */
-/* const filtroSelect = () => {
-  const filtered = productos.filter(producto => SELECT === 'Carta' || SELECT === producto.tipo);
+// Función para aplicar filtros dinámicos
+const filtroSelect = () => {
+  const filtered = productos.filter(producto => SELECT === '' || SELECT === producto.tipo)
+console.log(filtered);
   createProductos(filtered);
 };
-
+const filtroSelectAll = () =>{
+  createProductos()
+}
 
 const filtroPrecio = () => {
-  const valorNumerico = parseInt(VALOR);
-  if (!isNaN(valorNumerico)) {
-    const filtered = productos.filter(producto => valorNumerico === 0 || producto.precio <= valorNumerico);
-    createProductos(filtered);
-  } else {
-    alert("El valor ingresado no es un número");
-  }
-}; */
+  const filtered = productos.filter(producto => VALOR === '' || producto.precio <= VALOR);
+  console.log(filtered);
+  createProductos(filtered);
+};
 
 //Funcion para crear el navbar
 const createNavBar = () => {
@@ -357,8 +324,12 @@ const createAside = () => {
   labelAside.textContent = "Precio"
   botonInput.textContent = ("🔎")
 
+ // Agregar la opción "Todos" al principio del select
+ const optionTodos = document.createElement("option")
+ optionTodos.value = "Todos"
+ optionTodos.textContent = "Todos"
+ selectAside.appendChild(optionTodos)
   
-
 
 for( const tipo of TIPOS){ //DE ESTA FORMA NO SE REPITEN LOS TIPOS EN LAS OPCIONES DEL SELECT
   const option = document.createElement("option")
@@ -379,35 +350,39 @@ divAside.appendChild(botonAside)
 botonAside.addEventListener("click", ()=>{
   inputAside.value = ""
   contacarro.value = ""
-  selectAside.value = ""
+  selectAside.value = "Todos"
   createProductos()
 })
-
-
-selectAside.addEventListener("change", () => {
-  SELECT = e.target.value;  
-  for(const producto of productos){
-    if (!SELECT === producto.tipo){
-      articulo.classList.add("invisible")
-    }
+/* selectAside.addEventListener("change", (e) => {
+  SELECT = e.target.value
+  filtroSelect()
+}) */
+/* botonInput.addEventListener("click", () => filtroPrecio(inputAside.value)) */
+document.querySelector(".selectAside").addEventListener("change", (event) => {
+  SELECT = event.target.value;
+  if (SELECT === "Todos"){
+    filtroSelectAll()
+  }else{
+  filtroSelect();
   }
-})
+});
 
-
-
-
+document.querySelector(".botonInput").addEventListener("click", () => {
+  VALOR = parseInt(document.querySelector(".inputAside").value);
+  filtroPrecio();
+});
 
 }
 
 //funcion para inyectar todos los productos al main
-const createProductos = () => {
+const createProductos = (productosMostrar = productos) => {
 const containerSection = document.querySelector(".menu")
 const contacarro = document.querySelector(".contacarro")
 
 containerSection.innerHTML = ""
 
 
-productos.forEach(function(producto) {
+productosMostrar.forEach(function(producto) {
   
   let articulo = document.createElement("article")
   let divImg = document.createElement("div")
@@ -442,7 +417,7 @@ productos.forEach(function(producto) {
   articulo.appendChild(vegano)
   containerSection.appendChild(articulo)
   // evenlistener para el contador del carrito
-  btn.addEventListener("click", () => {
+ btn.addEventListener("click", () => {
     
     let valorActual = parseInt(contacarro.value);
     if (!isNaN(valorActual)) {
@@ -453,10 +428,9 @@ productos.forEach(function(producto) {
       contacarro.value = 1;
     }
   });
-
-
  
 })
+
 }
 //funcion para inyectar los comentarios de los clientes
 const createComments = () => { 
@@ -567,25 +541,16 @@ const createContacts = () => {
   })
 }
 
-//! si lo pongo aqui da error al cargar la pagina
 
 //Ejecución de funciones
 createNavBar()
 createAside()
-createProductos()
+createProductos(productos)
 createComments()
 createContacts()
 
-/* document.querySelector(".selectAside").addEventListener("change", (event) => {
-  SELECT = event.target.value;
-  filtroSelect();
-});
 
-document.querySelector(".botonInput").addEventListener("click", () => {
-  VALOR = document.querySelector(".inputAside").value;
-  if (!isNaN(parseInt(VALOR))) {
-    filtroPrecio();
-  } else {
-    alert("El valor ingresado no es un número");
-  }
-}); */
+
+
+
+
