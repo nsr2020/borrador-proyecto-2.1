@@ -47,10 +47,7 @@ list-style-type:none;
 
 /*DesplegableMenu----------------------------------------------------------------------------------*/
 
-.nav-list{
-  height: 100svh;
-  ;
-}
+
 
 .babrir{
   
@@ -96,7 +93,15 @@ align-items: center;
  width: 250px;
 }
 .babrir{
-  display: none;
+  
+  top:65px;
+  right: 15px;
+ border:0;
+ font-size: 25px;
+  opacity:0;
+  visibility: hidden;
+  width: 25px;
+  text-align: center;
 }
 .header a:hover{
   color: var(--nsr-color2);
@@ -276,9 +281,7 @@ font-size: small;
   cursor: pointer;
   
 }
-.invisible{
-  display: none;
-}
+
 
 /*--------------------------------Comentarios---------------------------------------------------*/
 .comments{
@@ -427,7 +430,7 @@ display: none;
     text-shadow: black 0.1em 0.1em 0.2em;
     position: absolute;
     top:48px;
- 
+    
   }
 
   .nav-list{
@@ -438,7 +441,7 @@ display: none;
     padding: 3rem;
     height: 35svh;
     opacity: 0.9;
- 
+    
   }
   .menu-item{
    position: absolute;
@@ -450,7 +453,7 @@ display: none;
     padding: 50px;
     border-radius: var(--nsr-bradius);
     left:-100px;
-    
+   
   }
   .menu-item a{
    background-color: pink;
