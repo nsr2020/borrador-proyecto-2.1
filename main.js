@@ -219,42 +219,40 @@ const fillTipos = (tipos) =>{
 fillTipos(productos)
 //--------------------------------------filtos para el select para buscar por precio y por cambio de opcion
 
+// Función de filtro única
+/* const filtro = (selectValor, precioValor) => {
+  const filtered = productos.filter((producto) => {
+    const categoriaMatch =
+      selectValor === "" || selectValor === producto.tipo;
+    const precioMatch =
+      precioValor === "" || producto.precio <= parseInt(precioValor);
+    return categoriaMatch && precioMatch;
+  });
 
-
-// Función para aplicar filtros dinámicos
-/* const filtroSelect = () => {
-  const filtered = productos.filter(producto => SELECT === '' || SELECT === producto.tipo)
-console.log(filtered);
-  createProductos(filtered);
-};
-
-
-const filtroPrecio = () => {
-  const filtered = productos.filter(producto => VALOR === '' || producto.precio <= VALOR);
-  console.log(filtered);
   createProductos(filtered);
 }; */
-// Función de filtro única
-const filtro = (valor, tipo) => {
-  if (tipo === "select") {
-    const filtered = productos.filter(
-      (producto) => valor === "" || valor === producto.tipo
-    );
-    console.log(filtered);
-    createProductos(filtered);
-  } else if (tipo === "precio") {
-    const filtered = productos.filter(
-      (producto) => valor === "" || producto.precio <= parseInt(valor)
-    );
-    
-    createProductos(filtered);
-  }
+const filtro = (selectValor, precioValor) => {
+  const filtered = productos.filter((producto) => {
+    if (selectValor === "Todos") {
+      // Si la opción es "Todos", aplicamos solo el filtro por precio
+      return precioValor === "" || producto.precio <= parseInt(precioValor);
+    } else {
+      // Aplicamos ambos filtros si la opción no es "Todos"
+      const categoriaMatch = selectValor === "" || selectValor === producto.tipo;
+      const precioMatch =
+        precioValor === "" || producto.precio <= parseInt(precioValor);
+      return categoriaMatch && precioMatch;
+    }
+  });
+  createProductos(filtered);
 };
 
 
 const filtroSelectAll = () =>{
-  createProductos()
-}
+  createProductos(productos)
+  }
+  
+
 
 //Funcion para crear el navbar
 const createNavBar = () => {
@@ -372,27 +370,23 @@ botonAside.addEventListener("click", ()=>{
   selectAside.value = "Todos"
   createProductos()
 })
-/* selectAside.addEventListener("change", (e) => {
-  SELECT = e.target.value
-  filtroSelect()
-}) */
-/* botonInput.addEventListener("click", () => filtroPrecio(inputAside.value)) */
+
 document.querySelector(".selectAside").addEventListener("change", (event) => {
   SELECT = event.target.value;
+  const VALOR = document.querySelector(".inputAside").value;
   if (SELECT === "Todos"){
     filtroSelectAll()
   }else{
-  filtro(SELECT, "select")
+  filtro(SELECT, VALOR)
   }
 });
 
-/* document.querySelector(".botonInput").addEventListener("click", () => {
-  VALOR = parseInt(document.querySelector(".inputAside").value);
-  filtroPrecio();
-}); */
+
+
 document.querySelector(".botonInput").addEventListener("click", () => {
   const VALOR = document.querySelector(".inputAside").value;
-  filtro(VALOR, "precio");
+  const SELECT = document.querySelector(".selectAside").value;
+  filtro(SELECT, VALOR);
 });
 
 }
